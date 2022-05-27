@@ -4,21 +4,22 @@ const path = require("path");
 const share = mf.share;
 
 const sharedMappings = new mf.SharedMappings();
-sharedMappings.register(
-  path.join(__dirname, 'tsconfig.json'),
-  [/* mapped paths to share */]);
+sharedMappings.register(path.join(__dirname, "tsconfig.json"), [
+  /* mapped paths to share */
+]);
 
 module.exports = {
   output: {
     uniqueName: "angularButton",
-    publicPath: "auto"
+    publicPath: "auto",
+    scriptType: "text/javascript"
   },
   optimization: {
     runtimeChunk: false
-  },   
+  },
   resolve: {
     alias: {
-      ...sharedMappings.getAliases(),
+      ...sharedMappings.getAliases()
     }
   },
   experiments: {
@@ -26,24 +27,42 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      library: { type: "var", name: "angular" },
+      library: { type: "var", name: "angularButton" },
       name: "angularButton",
       filename: "remoteEntry.js",
       exposes: {
-        "./AngularButton": "./src/bootstrap.ts",
-   
+        "./AngularButton": "./src/bootstrap.ts"
       },
-        shared: share({
-          "@angular/core": { singleton: true, strictVersion: true, requiredVersion: 'auto' }, 
-          "@angular/common": { singleton: true, strictVersion: true, requiredVersion: 'auto' }, 
-          "@angular/common/http": { singleton: true, strictVersion: true, requiredVersion: 'auto' }, 
-          "@angular/router": { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-          "windowed-observable": { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+      shared: share({
+        "@angular/core": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "auto"
+        },
+        "@angular/common": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "auto"
+        },
+        "@angular/common/http": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "auto"
+        },
+        "@angular/router": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "auto"
+        },
+        "windowed-observable": {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: "auto"
+        },
 
-          ...sharedMappings.getDescriptors()
-        })
-        
+        ...sharedMappings.getDescriptors()
+      })
     }),
     sharedMappings.getPlugin()
-  ],
+  ]
 };
