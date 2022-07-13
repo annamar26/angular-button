@@ -12,18 +12,18 @@ module.exports = {
   output: {
     uniqueName: "angularButton",
     publicPath: "auto",
-    scriptType: "text/javascript"
+    scriptType: "text/javascript",
   },
   optimization: {
-    runtimeChunk: false
+    runtimeChunk: false,
   },
   resolve: {
     alias: {
-      ...sharedMappings.getAliases()
-    }
+      ...sharedMappings.getAliases(),
+    },
   },
   experiments: {
-    outputModule: true
+    outputModule: true,
   },
   plugins: [
     new ModuleFederationPlugin({
@@ -31,38 +31,39 @@ module.exports = {
       name: "angularButton",
       filename: "remoteEntry.js",
       exposes: {
-        "./AngularButton": "./src/bootstrap.ts"
+        "./AngularButton": "./src/bootstrap.ts",
       },
+      remotes: { container: "container@http://localhost:3000/remoteEntry.js" },
       shared: share({
         "@angular/core": {
           singleton: true,
           strictVersion: true,
-          requiredVersion: "auto"
+          requiredVersion: "auto",
         },
         "@angular/common": {
           singleton: true,
           strictVersion: true,
-          requiredVersion: "auto"
+          requiredVersion: "auto",
         },
         "@angular/common/http": {
           singleton: true,
           strictVersion: true,
-          requiredVersion: "auto"
+          requiredVersion: "auto",
         },
         "@angular/router": {
           singleton: true,
           strictVersion: true,
-          requiredVersion: "auto"
+          requiredVersion: "auto",
         },
         "windowed-observable": {
           singleton: true,
           strictVersion: true,
-          requiredVersion: "auto"
+          requiredVersion: "auto",
         },
 
-        ...sharedMappings.getDescriptors()
-      })
+        ...sharedMappings.getDescriptors(),
+      }),
     }),
-    sharedMappings.getPlugin()
-  ]
+    sharedMappings.getPlugin(),
+  ],
 };
